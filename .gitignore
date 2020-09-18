@@ -146,3 +146,4 @@ cython_debug/
 
 # project files
 configs/*.json
+config.json
