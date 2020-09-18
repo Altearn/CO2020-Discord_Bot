@@ -8,8 +8,6 @@ import json
 from signal import SIGTERM
 from discord.ext import commands
 
-ALLOWED_USERS = [279568324260528128,  # Z_runner
-                 125722240896598016]  # Leirof / Vincent#4203
 
 
 class zbot(commands.bot.BotBase, discord.Client):

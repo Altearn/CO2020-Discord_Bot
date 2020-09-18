@@ -15,7 +15,7 @@ def cleanup_code(content):
     return content.strip('` \n')
 
 async def check_admin(ctx):
-    return ctx.author.id in [279568324260528128, 125722240896598016]
+    return ctx.author.id in [279568324260528128, 125722240896598016, 621874860544622605]
 
 class AdminCog(commands.Cog):
     """Here are listed all commands related to the internal administration of the bot. Most of them are not accessible to users, but only to ZBot administrators."""
@@ -35,6 +35,7 @@ class AdminCog(commands.Cog):
 
 
     @commands.group(name='admin',hidden=True)
+    @commands.check(check_admin)
     async def main_msg(self,ctx):
         """Commandes réservées aux administrateurs de ZBot"""
         if ctx.subcommand_passed==None:
