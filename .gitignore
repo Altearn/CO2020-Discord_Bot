@@ -145,4 +145,4 @@ cython_debug/
 .vscode/
 
 # project files
-configs/
+configs/*.json
