@@ -29,10 +29,10 @@ def get_prefix(bot, msg):
 def main():
     client = zbot(command_prefix=get_prefix, case_insensitive=True)
 
-    client.load_extension("admin")
-    client.load_extension("vote")
+    client.load_extension("cogs/admin")
+    client.load_extension("cogs/vote")
     client.load_extension("configManager")
-    client.load_extension("giveaways")
+    client.load_extension("cogs/giveaways")
 
     async def on_ready():
         print('\nBot connecté')
