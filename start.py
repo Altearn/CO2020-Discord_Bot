@@ -4,6 +4,7 @@
 import discord
 import time
 import asyncio
+import json
 from signal import SIGTERM
 from discord.ext import commands
 
@@ -55,10 +56,10 @@ def main():
             return True
 
     client.add_listener(on_ready)
-    # client.add_check(check_once, call_once=True)
 
-    # client.run("NzIzMjUyNzY4MDg0NTkwNjMz.XuvcfQ.siAjI04qNzXGEkHIU6MZ7G-6c-0")
-    client.run("***REMOVED***")
+    with open("config.json", "r", encoding="utf8") as f:
+        data = json.load(f)
+        client.run(data['bot_token'])
 
 
 if __name__ == "__main__":
