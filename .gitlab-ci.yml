@@ -6,4 +6,4 @@ before_script:
 
 build:
   script:
-    - lftp -e "open $gunibot_ip; user $gunibot_user $gunibot_pass; mirror -X .* -X .*/ --reverse --verbose --delete . ~/; bye"
+    - lftp -e "mirror -X .* -X .*/ --reverse --verbose --delete . ~/; quit" -u $GUNIBOT_USER,$GUNIBOT_PASS sftp://$GUNIBOT_IP -p $GUNIBOT_PORT
