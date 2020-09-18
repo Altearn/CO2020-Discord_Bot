@@ -1,0 +1,9 @@
+image: ubuntu:18.04
+
+before_script:
+  - apt-get update -qy
+  - apt-get install -y lftp
+
+build:
+  script:
+    - lftp -e "open $gunibot_ip; user $gunibot_user $gunibot_pass; mirror -X .* -X .*/ --reverse --verbose --delete . ~/; bye"
