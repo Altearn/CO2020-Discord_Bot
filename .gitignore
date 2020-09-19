@@ -147,3 +147,9 @@ cython_debug/
 # project files
 configs/*.json
 config.json
+
+# other weird things I won't touch
+.ssh/
+.cache
+.bash*
+.profile
