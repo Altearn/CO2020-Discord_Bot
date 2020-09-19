@@ -4,16 +4,11 @@ image: ubuntu:18.04
 before_script:
   - apt-get update -qy
   - apt-get install -y lftp
-  - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-  - eval $(ssh-agent -s)
-  - echo "$CO_KEY" | tr -d '\r' | ssh-add -
-
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
 
 build:
   script:
-    #  - echo $GUNIBOT_IP
-    #  - echo $GUNIBOT_USER
-    #  - echo $GUNIBOT_PASS
-    - lftp -e 'set sftp:auto-confirm yes;set ssl:verify-certificate no;mirror -X .* -X .*/ --reverse --verbose --delete . ~/; quit' -u $CO_USER,$CO_PASS sftp://$CO_IP -p 22
+    #  - echo $CO_IP
+    #  - echo $CO_USER
+    #  - echo $CO_PASS
+    - lftp -e 'set sftp:auto-confirm yes;set ssl:verify-certificate no;set sftp:connect-program "ssh -a -x -i $CO_KEY";mirror -X .* -X .*/ --reverse --verbose --delete . ~/; quit' -u $CO_USER,$CO_PASS sftp://$CO_IP -p 22
+
