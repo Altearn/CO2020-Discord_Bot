@@ -73,6 +73,12 @@ class AdminCog(commands.Cog):
         print("Redémarrage du bot")
         os.execl(sys.executable, sys.executable, 'start.py')
     
+    @main_msg.command(name='purge')
+    async def clean(self, ctx, limit: int):
+        await ctx.channel.purge(limit=limit)
+        await ctx.send('Purged by {}'.format(ctx.author.mention))
+        await ctx.message.delete()
+    
     async def cleanup_workspace(self):
         for folderName, _, filenames in os.walk('.'):
             for filename in filenames:
