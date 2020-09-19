@@ -29,7 +29,7 @@ def main():
 
     client.load_extension("cogs.admin")
     client.load_extension("cogs.vote")
-    client.load_extension("configManager")
+    client.load_extension("cogs.configManager")
     client.load_extension("cogs.giveaways")
 
     async def on_ready():
