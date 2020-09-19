@@ -34,6 +34,7 @@ class AdminCog(commands.Cog):
         await m.edit(content=":ping_pong:  Pong !\nBot ping: {}ms\nDiscord ping: {}ms".format(round(t*1000),round(self.bot.latency*1000)))
 
 
+
     @commands.group(name='admin',hidden=True)
     @commands.check(check_admin)
     async def main_msg(self,ctx):
@@ -58,6 +59,19 @@ class AdminCog(commands.Cog):
         print("Fermeture du bot")
         await self.bot.logout()
         await self.bot.close()
+
+    @main_msg.command(name='pull')
+    async def pull(self, ctx):
+        """Tire des changements de GitLab"""
+        m = await ctx.send("Mise à jour depuis gitlab...")
+        repo = Repo('/home/Gunibot.py')
+        assert not repo.bare
+        origin = repo.remotes.origin
+        origin.pull()
+        await ctx.send(content="Redémarrage en cours...")
+        await self.cleanup_workspace()
+        print("Redémarrage du bot")
+        os.execl(sys.executable, sys.executable, 'start.py')
     
     async def cleanup_workspace(self):
         for folderName, _, filenames in os.walk('.'):
