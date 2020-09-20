@@ -21,7 +21,7 @@ class zbot(commands.bot.BotBase, discord.Client):
 
 
 def get_prefix(bot, msg):
-    return commands.when_mentioned_or("/")(bot, msg)
+    return commands.when_mentioned_or("^")(bot, msg)
 
 
 def main():

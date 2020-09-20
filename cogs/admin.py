@@ -4,6 +4,7 @@ from discord.ext import commands
 import os, sys, copy, traceback, io, textwrap, typing
 from contextlib import redirect_stdout
 from glob import glob
+from git import Repo, Remote
 
 
 def cleanup_code(content):
