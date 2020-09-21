@@ -1,7 +1,13 @@
 import discord
 from discord.ext import commands
 
-import os, sys, copy, traceback, io, textwrap, typing
+import os
+import sys
+import copy
+import traceback
+import io
+import textwrap
+import typing
 from contextlib import redirect_stdout
 from glob import glob
 from git import Repo, Remote
@@ -15,43 +21,43 @@ def cleanup_code(content):
     # remove `foo`
     return content.strip('` \n')
 
+
 async def check_admin(ctx):
     return ctx.author.id in [279568324260528128, 125722240896598016, 621874860544622605]
 
+
 class AdminCog(commands.Cog):
     """Here are listed all commands related to the internal administration of the bot. Most of them are not accessible to users, but only to ZBot administrators."""
-        
+
     def __init__(self, bot):
         self.bot = bot
         self.file = "admin"
         self._last_result = None
 
-    @commands.command(name="ping",aliases=['rep'])
-    async def rep(self,ctx,ip=None):
+    @commands.command(name="ping", aliases=['rep'])
+    async def rep(self, ctx, ip=None):
         """Get bot latency
         You can also use this command to ping any other server"""
         m = await ctx.send("Ping...")
         t = (m.created_at - ctx.message.created_at).total_seconds()
-        await m.edit(content=":ping_pong:  Pong !\nBot ping: {}ms\nDiscord ping: {}ms".format(round(t*1000),round(self.bot.latency*1000)))
+        await m.edit(content=":ping_pong:  Pong !\nBot ping: {}ms\nDiscord ping: {}ms".format(round(t*1000), round(self.bot.latency*1000)))
 
-
-
-    @commands.group(name='admin',hidden=True)
+    @commands.group(name='admin', hidden=True)
     @commands.check(check_admin)
-    async def main_msg(self,ctx):
+    async def main_msg(self, ctx):
         """Commandes réservées aux administrateurs de ZBot"""
-        if ctx.subcommand_passed==None:
+        if ctx.subcommand_passed == None:
             text = "Liste des commandes disponibles :"
-            for cmd in sorted(self.main_msg.commands, key=lambda x:x.name):
-                text+="\n- {} *({})*".format(cmd.name,'...' if cmd.help==None else cmd.help.split('\n')[0])
-                if type(cmd)==commands.core.Group:
+            for cmd in sorted(self.main_msg.commands, key=lambda x: x.name):
+                text += "\n- {} *({})*".format(cmd.name, '...' if cmd.help ==
+                                               None else cmd.help.split('\n')[0])
+                if type(cmd) == commands.core.Group:
                     for cmds in cmd.commands:
-                        text+="\n        - {} *({})*".format(cmds.name,cmds.help.split('\n')[0])
+                        text += "\n        - {} *({})*".format(cmds.name, cmds.help.split('\n')[0])
             await ctx.send(text)
 
-
     @main_msg.command(name='shutdown')
-    async def shutdown(self,ctx):
+    async def shutdown(self, ctx):
         """Eteint le bot"""
         m = await ctx.send("Nettoyage de l'espace de travail...")
         await self.cleanup_workspace()
@@ -73,23 +79,23 @@ class AdminCog(commands.Cog):
         await self.cleanup_workspace()
         print("Redémarrage du bot")
         os.execl(sys.executable, sys.executable, 'start.py')
-    
+
     @main_msg.command(name='purge')
     async def clean(self, ctx, limit: int):
         await ctx.channel.purge(limit=limit)
         await ctx.send('Purged by {}'.format(ctx.author.mention))
         await ctx.message.delete()
-    
+
     async def cleanup_workspace(self):
         for folderName, _, filenames in os.walk('.'):
             for filename in filenames:
                 if filename.endswith('.pyc'):
                     os.unlink(folderName+'/'+filename)
-            if  folderName.endswith('__pycache__'):
+            if folderName.endswith('__pycache__'):
                 os.rmdir(folderName)
-    
+
     @main_msg.command(name='reboot')
-    async def restart_bot(self,ctx):
+    async def restart_bot(self, ctx):
         """Relance le bot"""
         await ctx.send(content="Redémarrage en cours...")
         await self.cleanup_workspace()
@@ -107,14 +113,14 @@ class AdminCog(commands.Cog):
                 await ctx.send(str(e))
             else:
                 done.append(cog)
-        if len(done)>0:
-            s = "s" if len(done)>1 else ""
+        if len(done) > 0:
+            s = "s" if len(done) > 1 else ""
             await ctx.send("Module{0} {1} rechargé{0}".format(s, " - ".join(done)))
             print("Module{0} {1} rechargé{0}".format(s, " - ".join(done)))
 
-    @main_msg.command(name="add_cog",hidden=True)
+    @main_msg.command(name="add_cog", hidden=True)
     @commands.check(check_admin)
-    async def add_cog(self,ctx,name):
+    async def add_cog(self, ctx, name):
         """Ajouter un cog au bot"""
         try:
             self.bot.load_extension('fcts.'+name)
@@ -123,9 +129,9 @@ class AdminCog(commands.Cog):
         except Exception as e:
             await ctx.send(str(e))
 
-    @main_msg.command(name="del_cog",aliases=['remove_cog'],hidden=True)
+    @main_msg.command(name="del_cog", aliases=['remove_cog'], hidden=True)
     @commands.check(check_admin)
-    async def rm_cog(self,ctx,name):
+    async def rm_cog(self, ctx, name):
         """Enlever un cog au bot"""
         try:
             self.bot.unload_extension('fcts.'+name)
@@ -133,7 +139,6 @@ class AdminCog(commands.Cog):
             print("Module {} ajouté".format(name))
         except Exception as e:
             await ctx.send(str(e))
-    
 
     @main_msg.command(name='eval')
     @commands.check(check_admin)
@@ -156,7 +161,7 @@ class AdminCog(commands.Cog):
         try:
             to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
         except Exception as e:
-            await self.bot.cogs['ErrorsCog'].on_error(e,ctx)
+            await self.bot.cogs['ErrorsCog'].on_error(e, ctx)
             return
         try:
             exec(to_compile, env)
@@ -180,8 +185,8 @@ class AdminCog(commands.Cog):
             else:
                 self._last_result = ret
                 await ctx.send(f'```py\n{value}{ret}\n```')
-    
-    @main_msg.command(name='execute',hidden=True)
+
+    @main_msg.command(name='execute', hidden=True)
     @commands.check(check_admin)
     async def sudo(self, ctx, who: typing.Union[discord.Member, discord.User], *, command: str):
         """Run a command as another user
@@ -193,7 +198,6 @@ class AdminCog(commands.Cog):
         #new_ctx.db = ctx.db
         await self.bot.invoke(new_ctx)
         await ctx.bot.cogs['UtilitiesCog'].add_check_reaction(ctx.message)
-
 
 
 def setup(bot):

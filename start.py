@@ -9,7 +9,6 @@ from signal import SIGTERM
 from discord.ext import commands
 
 
-
 class zbot(commands.bot.BotBase, discord.Client):
 
     def __init__(self, command_prefix=None, case_insensitive=None, status=None, database_online=True, beta=False, dbl_token=""):

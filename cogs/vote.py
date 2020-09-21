@@ -42,7 +42,7 @@ class Creative(commands.Cog):
                     await ctx.send(f"error occured: {e}")
 
     @commands.command(name="donation", aliases=['mylink', 'donator'])
-    async def donation(self, ctx:commands.Context, user: typing.Optional[discord.Member]):
+    async def donation(self, ctx: commands.Context, user: typing.Optional[discord.Member]):
         if user == None:
             user = ctx.author
         await ctx.send("https://gift.creative-olympics.net/donate/"+str(user.id))

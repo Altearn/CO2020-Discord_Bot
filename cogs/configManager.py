@@ -5,6 +5,7 @@ import re
 
 CONFIG_FOLDER = "configs"
 
+
 class serverConfig(dict):
     def __init__(self, manager, serverID, value):
         super().__init__(value)
@@ -17,10 +18,11 @@ class serverConfig(dict):
     def __setitem__(self, key, item):
         super().__setitem__(key, item)
         self.manager[self.serverID] = self
-    
+
     def __delitem__(self, key):
         super().__delitem__(key)
         self.manager[self.serverID] = self
+
 
 class ConfigCog(commands.Cog):
 
@@ -96,6 +98,7 @@ class ConfigCog(commands.Cog):
 
         def __contains__(self, item):
             return self.has_key(item)
+
 
 def setup(bot):
     bot.add_cog(ConfigCog(bot))

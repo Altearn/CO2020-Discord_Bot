@@ -247,8 +247,8 @@ class Giveaways(commands.Cog):
                         d['started'] = False
                         await self.send_results(d, await self.pick_winners(self.bot.get_guild(server), d))
 
-
     # http://bit.ly/2ofiay3
+
     def secondsToText(self, secs):
         days = secs//86400
         hours = (secs - days*86400)//3600
