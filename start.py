@@ -9,7 +9,7 @@ from signal import SIGTERM
 from discord.ext import commands
 
 
-class zbot(commands.bot.BotBase, discord.Client):
+class COBot(commands.bot.BotBase, discord.Client):
 
     def __init__(self, command_prefix=None, case_insensitive=None, status=None, database_online=True, beta=False, dbl_token=""):
         super().__init__(command_prefix=command_prefix,
@@ -24,7 +24,7 @@ def get_prefix(bot, msg):
 
 
 def main():
-    client = zbot(command_prefix=get_prefix, case_insensitive=True)
+    client = COBot(command_prefix=get_prefix, case_insensitive=True)
 
     client.load_extension("cogs.admin")
     client.load_extension("cogs.vote")

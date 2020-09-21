@@ -27,7 +27,7 @@ async def check_admin(ctx):
 
 
 class AdminCog(commands.Cog):
-    """Here are listed all commands related to the internal administration of the bot. Most of them are not accessible to users, but only to ZBot administrators."""
+    """Here are listed all commands related to the internal administration of the bot. Most of them are not accessible to users, but only to COBot administrators."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -45,7 +45,7 @@ class AdminCog(commands.Cog):
     @commands.group(name='admin', hidden=True)
     @commands.check(check_admin)
     async def main_msg(self, ctx):
-        """Commandes réservées aux administrateurs de ZBot"""
+        """Commandes réservées aux administrateurs de COBot"""
         if ctx.subcommand_passed == None:
             text = "Liste des commandes disponibles :"
             for cmd in sorted(self.main_msg.commands, key=lambda x: x.name):
